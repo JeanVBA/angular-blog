@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { dataFake } from 'src/app/Data/dataFake';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-content',
+  templateUrl: './content.component.html',
+  styleUrls: ['./content.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class ContentComponent implements OnInit {
   @Input()
   id: string | null = '0';
   @Input()
@@ -15,9 +16,14 @@ export class HomeComponent implements OnInit {
   cardTitle: string = '';
   @Input()
   cardDescription: string = '';
-  ngOnInit(): void {}
+  constructor(private route: ActivatedRoute) {}
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((value) => (this.id = value.get('id')));
+    this.setValuesToComponent(this.id);
+  }
   setValuesToComponent(id: string | null) {
     const result = dataFake.filter((article) => article.id == id)[0];
+
     this.cardTitle = result.title;
     this.cardDescription = result.description;
     this.photoCover = result.photo;
